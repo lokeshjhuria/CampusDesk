@@ -1,0 +1,29 @@
+# Multi-stage build for Vercel Container Runtime
+FROM eclipse-temurin:17-jdk-jammy AS build
+WORKDIR /build
+
+# Copy Java source files and compile
+COPY *.java ./
+RUN mkdir -p out && javac -encoding UTF-8 -d out *.java
+
+# Lightweight runtime stage
+FROM eclipse-temurin:17-jre-jammy
+WORKDIR /app
+
+# Create a non-root application user and ensure data directory is ready
+RUN useradd --system --uid 10001 --home-dir /app app \
+    && mkdir -p /app/data \
+    && chown -R app:app /app
+
+# Copy compiled classes from build stage
+COPY --from=build --chown=app:app /build/out /app/out
+
+# Defaults: listen on all interfaces and default port 8080 (Vercel overrides PORT dynamically)
+ENV HOST=0.0.0.0
+ENV PORT=8080
+EXPOSE 8080
+
+USER app
+
+# Start the web server
+CMD ["java", "-cp", "/app/out", "college.registration.Main"]

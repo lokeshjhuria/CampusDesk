@@ -13,15 +13,25 @@ CampusDesk is a local Java web application for managing students, courses, regis
 ```text
 ├── *.java                  # Application sources
 ├── RegistrationSystemTest.java
-├── Dockerfile              # Container image
+├── Dockerfile              # Standard Container image
+├── Dockerfile.vercel       # Vercel Container Runtime image
+├── vercel.json             # Vercel deployment configuration
 ├── compose.yaml            # Local container deployment with persistent data
+├── run.ps1 / run.bat       # Quick launch scripts for Windows
 └── data/                   # Created automatically; keep this directory persistent
 ```
 
-## Run the website
+## Quick Start (Local)
 
-From the project root in Windows PowerShell:
-
+Run with PowerShell:
+```powershell
+.\run.ps1
+```
+Or with Command Prompt:
+```cmd
+run.bat
+```
+Or manually with `javac`:
 ```powershell
 $sources = Get-ChildItem -Path . -Filter *.java | ForEach-Object { $_.FullName }
 New-Item -ItemType Directory -Force out | Out-Null
@@ -29,15 +39,17 @@ javac -encoding UTF-8 -d out $sources
 java -cp out college.registration.Main
 ```
 
-Open **http://localhost:8080** in your browser. Sign in with the demo account below. Stop the server with **Ctrl+C** in the terminal.
+Open **http://localhost:8080** in your browser. Default login: `admin` / `admin123`.
 
-An optional port can be passed to `Main`, for example:
+## Deploy to Vercel
 
-```powershell
-java -cp out college.registration.Main 8090
-```
+CampusDesk includes first-class support for **Vercel Container Runtime** (`Dockerfile.vercel`).
 
-Then open `http://localhost:8090`. By default, the server binds to this computer's loopback interface only; it is not exposed to the local network. `Main` also accepts `PORT` and `HOST` environment variables; command-line port arguments take precedence over `PORT`.
+1. Push your repository to GitHub.
+2. In the [Vercel Dashboard](https://vercel.com), click **Add New...** -> **Project** and import `CampusDesk`.
+3. Vercel automatically detects `Dockerfile.vercel` and deploys your Java web app to a live URL.
+
+For detailed deployment instructions and options, see [VERCEL_DEPLOYMENT.md](file:///C:/Users/lokes/.gemini/antigravity/scratch/CampusDesk/VERCEL_DEPLOYMENT.md).
 
 ## Deploy with Docker
 

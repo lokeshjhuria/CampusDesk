@@ -1,5 +1,7 @@
 package college.registration;
 
+import java.nio.file.Path;
+
 public class Main {
     public static void main(String[] args) {
         try {
@@ -7,8 +9,12 @@ public class Main {
             int port = args.length > 0
                     ? Integer.parseInt(args[0])
                     : configuredPort == null || configuredPort.isBlank() ? 8080 : Integer.parseInt(configuredPort);
-            String host = System.getenv().getOrDefault("HOST", "127.0.0.1");
-            FileHandler fileHandler = new FileHandler();
+            String defaultHost = (configuredPort != null && !configuredPort.isBlank()) ? "0.0.0.0" : "127.0.0.1";
+            String host = System.getenv().getOrDefault("HOST", defaultHost);
+            String dataDir = System.getenv("DATA_DIR");
+            FileHandler fileHandler = (dataDir != null && !dataDir.isBlank())
+                    ? new FileHandler(Path.of(dataDir))
+                    : new FileHandler();
             StudentManager students = new StudentManager(fileHandler);
             CourseManager courses = new CourseManager(fileHandler);
             RegistrationManager registrations = new RegistrationManager(fileHandler, students, courses);

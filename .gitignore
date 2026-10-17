@@ -1,0 +1,15 @@
+# IDE & Editor files
+.idea/
+*.iml
+.vscode/
+.settings/
+.project
+.classpath
+
+# Vercel deployment cache
+.vercel/
+
+# OS metadata
+.DS_Store
+Thumbs.db
+desktop.ini
