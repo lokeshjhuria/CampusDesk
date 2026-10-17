@@ -1,0 +1,11 @@
+services:
+  campusdesk:
+    build: .
+    ports:
+      - "${PORT:-8080}:8080"
+    volumes:
+      - campusdesk-data:/app/data
+    restart: unless-stopped
+
+volumes:
+  campusdesk-data:

@@ -11,28 +11,11 @@ CampusDesk is a local Java web application for managing students, courses, regis
 ## Project structure
 
 ```text
-OOPs/
-├── data/                              # Created automatically on first run
-│   ├── students.txt
-│   ├── courses.txt
-│   ├── registrations.txt
-│   └── users.txt
-├── src/main/java/college/registration/
-│   ├── Main.java                      # Starts the local website
-│   ├── WebServer.java                 # HTTP routes, login session, browser UI
-│   ├── Person.java
-│   ├── Student.java
-│   ├── Course.java
-│   ├── Registration.java
-│   ├── FileHandler.java               # CSV/text-file persistence
-│   ├── StudentManager.java
-│   ├── CourseManager.java
-│   └── RegistrationManager.java
-├── tests/RegistrationSystemTest.java  # Model, storage, and HTTP workflow tests
-└── docs/
-    ├── project-report.md
-    ├── test-cases.md
-    └── viva-questions.md
+├── *.java                  # Application sources
+├── RegistrationSystemTest.java
+├── Dockerfile              # Container image
+├── compose.yaml            # Local container deployment with persistent data
+└── data/                   # Created automatically; keep this directory persistent
 ```
 
 ## Run the website
@@ -40,7 +23,7 @@ OOPs/
 From the project root in Windows PowerShell:
 
 ```powershell
-$sources = Get-ChildItem -Path src\main\java -Recurse -Filter *.java | ForEach-Object { $_.FullName }
+$sources = Get-ChildItem -Path . -Filter *.java | ForEach-Object { $_.FullName }
 New-Item -ItemType Directory -Force out | Out-Null
 javac -encoding UTF-8 -d out $sources
 java -cp out college.registration.Main
@@ -54,7 +37,25 @@ An optional port can be passed to `Main`, for example:
 java -cp out college.registration.Main 8090
 ```
 
-Then open `http://localhost:8090`. The server binds to this computer's loopback interface only; it is not exposed to the local network.
+Then open `http://localhost:8090`. By default, the server binds to this computer's loopback interface only; it is not exposed to the local network. `Main` also accepts `PORT` and `HOST` environment variables; command-line port arguments take precedence over `PORT`.
+
+## Deploy with Docker
+
+Install Docker with Compose, then run from the project root:
+
+```powershell
+docker compose up --build -d
+```
+
+Open **http://localhost:8080**. Compose keeps application records in the `campusdesk-data` named volume across container rebuilds and restarts. To stop the application without deleting data, run:
+
+```powershell
+docker compose down
+```
+
+The container listens on all interfaces inside Docker and reads its port from `PORT` (default `8080`). Set `PORT` in the environment before starting Compose to change the host port, for example `$env:PORT = "8090"`. When deploying the image on a hosting platform, configure its port as `8080` and attach persistent storage at `/app/data`.
+
+**Before exposing this classroom application to the public internet:** the default data store seeds an `admin` / `admin123` account, and open sign-up grants administrator permissions. Replace or remove the default account and restrict account creation before public deployment. The built-in HTTP server does not provide TLS; use a platform HTTPS proxy. The app's file-based storage is intended for a single application instance, not horizontally scaled replicas.
 
 ### IntelliJ IDEA or Eclipse
 

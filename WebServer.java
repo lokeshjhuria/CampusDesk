@@ -30,11 +30,16 @@ public final class WebServer implements AutoCloseable {
 
     public WebServer(FileHandler fileHandler, StudentManager students, CourseManager courses,
                      RegistrationManager registrations, int port) throws IOException {
+        this(fileHandler, students, courses, registrations, port, "127.0.0.1");
+    }
+
+    public WebServer(FileHandler fileHandler, StudentManager students, CourseManager courses,
+                     RegistrationManager registrations, int port, String host) throws IOException {
         this.fileHandler = fileHandler;
         this.students = students;
         this.courses = courses;
         this.registrations = registrations;
-        server = HttpServer.create(new InetSocketAddress("127.0.0.1", port), 0);
+        server = HttpServer.create(new InetSocketAddress(host, port), 0);
         server.createContext("/", this::handle);
         executor = Executors.newSingleThreadExecutor(runnable -> {
             Thread thread = new Thread(runnable, "campusdesk-web");
