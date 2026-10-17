@@ -1,0 +1,5 @@
+"CRS001","Data Structures","CS201","Computer Science","Dr. Meera Rao","4","30"
+"CRS002","Digital Electronics","EC202","Electronics","Prof. Anil Shah","3","25"
+"CRS003","Engineering Mechanics","ME203","Mechanical","Dr. Neha Joshi","4","20"
+"CRS004","Linear Algebra","MA204","Mathematics","Prof. R. Iyer","3","40"
+"CRS005","Technical Writing","HU205","Humanities","Dr. Sana Khan","2","35"

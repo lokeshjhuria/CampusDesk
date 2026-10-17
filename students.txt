@@ -1,0 +1,4 @@
+"STU001","Aarav Sharma","aarav@example.com","9876543210","Computer Science","3"
+"STU002","Diya Patel","diya@example.com","9876543211","Electronics","2"
+"STU003","Kabir Singh","kabir@example.com","9876543212","Mechanical","4"
+"STU166","Aniket","Aniketjagtap8698@gmail.com","9322495646","IT","1"
